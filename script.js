@@ -1,4 +1,3 @@
-// Espera a que todo el contenido de la página (HTML) se cargue
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- Selectores de Elementos ---
@@ -13,131 +12,136 @@ document.addEventListener('DOMContentLoaded', () => {
     const girlResult = document.getElementById('girl-name-result');
     
     const rainContainer = document.getElementById('heart-rain-container');
+    const containerMain = document.querySelector('.container'); // El contenedor principal
 
     // --- Estado Inicial ---
     let clickCount = 137;
     counterDisplay.textContent = clickCount;
 
-    // --- Lógica de la Lluvia de Corazones ---
-    function createHeartRain() {
-        const heartEl = document.createElement('div');
-        heartEl.classList.add('heart-rain');
-        heartEl.innerHTML = '💖'; // Puedes cambiarlo por '❤' o '💕'
+    // --- Lógica de la Lluvia de Corazones y "Te Amo" ---
+    function createFallingItem() {
+        const itemEl = document.createElement('div');
+        itemEl.classList.add('falling-item');
         
-        // Posición horizontal aleatoria
-        heartEl.style.left = `${Math.random() * 100}vw`;
+        // Decide si es un corazón o "Te Amo"
+        if (Math.random() < 0.6) { // 60% de probabilidad de corazón
+            itemEl.innerHTML = '💖'; 
+        } else { // 40% de probabilidad de "Te Amo"
+            itemEl.innerHTML = 'Te Amo';
+            itemEl.classList.add('text'); // Para aplicar estilos de texto
+        }
         
-        // Duración de caída aleatoria (entre 3 y 6 segundos)
-        heartEl.style.animationDuration = `${Math.random() * 3 + 3}s`;
-        
-        // Opacidad aleatoria
-        heartEl.style.opacity = Math.random() * 0.5 + 0.3; // Entre 0.3 y 0.8
-        
-        // Tamaño aleatorio
-        heartEl.style.fontSize = `${Math.random() * 1 + 0.8}rem`; // Entre 0.8rem y 1.8rem
+        itemEl.style.left = `${Math.random() * 100}vw`;
+        itemEl.style.animationDuration = `${Math.random() * 4 + 4}s`; // Duración entre 4 y 8 segundos
+        itemEl.style.opacity = Math.random() * 0.5 + 0.3; 
+        itemEl.style.fontSize = `${Math.random() * 1 + 1}rem`; // Tamaño entre 1rem y 2rem (más variado)
 
-        rainContainer.appendChild(heartEl);
+        rainContainer.appendChild(itemEl);
 
-        // Limpia el corazón del DOM después de que termine la animación
         setTimeout(() => {
-            heartEl.remove();
-        }, 6000); // Un poco más que la duración máxima de la animación
+            itemEl.remove();
+        }, parseFloat(itemEl.style.animationDuration) * 1000); 
     }
 
-    // Crea un nuevo corazón cada 300ms
-    setInterval(createHeartRain, 300);
+    // Lanza un nuevo elemento cada 400ms
+    setInterval(createFallingItem, 400);
 
     // --- Lógica del Contador de Clics ---
     heart.addEventListener('click', () => {
         if (clickCount > 0) {
-            // Resta un clic
             clickCount--;
             counterDisplay.textContent = clickCount;
 
-            // --- Efecto de clic en el corazón ---
             heart.classList.add('heart-clicked');
-            
-            // Crea una pequeña explosión de corazones al hacer clic
-            createClickEffect(heart.getBoundingClientRect());
+            createClickEffect(heart.getBoundingClientRect()); // Explosión de corazones
 
-            // Quita la clase de animación después de un momento
             setTimeout(() => {
                 heart.classList.remove('heart-clicked');
             }, 200);
 
-            // --- ¡Se completó el contador! ---
             if (clickCount === 0) {
                 triggerFinalEffect();
             }
         }
     });
 
-    // Función para el efecto final
+    // Función para el efecto final al llegar a 0 clics
     function triggerFinalEffect() {
-        // 1. Aplica el "Efecto" de desaparición a la sección del clicker
+        // Aplica la animación de "desaparecer hacia abajo" al clicker
         clickerSection.classList.add('fadeOut');
-
-        // 2. Espera a que termine la animación de fadeOut (0.5s)
+        
+        // Espera a que la animación termine antes de mostrar el resto
         setTimeout(() => {
-            // 3. Oculta la sección del clicker permanentemente
-            clickerSection.style.display = 'none';
+            clickerSection.style.display = 'none'; // Oculta definitivamente el clicker
 
-            // 4. Muestra las secciones ocultas (el CSS se encarga de la animación 'fadeIn')
+            // Muestra las secciones con sus animaciones de entrada
             messageSection.style.display = 'block';
             namesSection.style.display = 'block';
 
-            // Opcional: Intensificar la lluvia de corazones
-            // (Podríamos llamar a createHeartRain() más rápido)
+            // Pequeña animación para el contenedor principal
+            containerMain.style.animation = 'none'; // Desactiva la animación inicial
+            containerMain.offsetHeight; // Truco para reiniciar la animación
+            containerMain.style.animation = 'containerRescale 1s ease-out forwards'; // Nueva animación
             
-        }, 500); // 500ms = 0.5s (la duración de la animación fadeOut)
+        }, 700); // Duración de fadeOutDown
     }
+
+    // Animación de re-escalado/ajuste del contenedor principal
+    // Necesario porque el contenido puede cambiar la altura del contenedor
+    // Puedes ajustar los valores para que quede perfecto
+    // @keyframes containerRescale en el CSS
+    // Nota: Esta animación puede ser más compleja si el contenido cambia mucho
+    // Aquí es solo un pequeño ajuste visual
+    // Ya que ahora la visibilidad se controla por display:block, las animaciones fadeInFromTop hacen el trabajo.
+    // Se elimina la necesidad de esta animación extra en JS para el contenedor principal.
 
     // --- Lógica del Formulario de Niñas ---
     girlForm.addEventListener('submit', (event) => {
-        // Previene que la página se recargue al presionar "Enter"
         event.preventDefault(); 
         
-        // Muestra el mensaje personalizado
-        girlResult.textContent = 'NO BEBE, LAUTY ELIGE LOS NOMBRES OK?';
-        
-        // Añade la animación "shake"
-        girlResult.classList.add('shake');
+        // Asegúrate de que el mensaje no se active si el input está vacío
+        if (girlInput.value.trim() !== '') {
+            girlResult.textContent = 'NO BEBE, LAUTY ELIGE LOS NOMBRES OK?';
+            girlResult.classList.add('shake');
 
-        // Limpia el input
+            setTimeout(() => {
+                girlResult.classList.remove('shake');
+            }, 500); 
+        } else {
+             girlResult.textContent = '¡Escribe un nombre, mi amor!'; // Mensaje si el input está vacío
+             girlResult.classList.add('shake');
+              setTimeout(() => {
+                girlResult.classList.remove('shake');
+                girlResult.textContent = ''; // Limpiar el mensaje
+            }, 1000); 
+        }
         girlInput.value = '';
-
-        // Quita la animación "shake" después de que termine
-        setTimeout(() => {
-            girlResult.classList.remove('shake');
-        }, 500); // 500ms = 0.5s (duración de la animación)
     });
 
     // --- Función Extra: Explosión de corazones al hacer clic ---
     function createClickEffect(rect) {
-        for (let i = 0; i < 10; i++) { // Lanza 10 corazones
+        for (let i = 0; i < 7; i++) { // Lanza 7 corazones
             const miniHeart = document.createElement('div');
             miniHeart.innerHTML = '💕';
             miniHeart.style.position = 'absolute';
-            // Posiciona los corazones en el centro del corazón grande
             miniHeart.style.left = `${rect.left + rect.width / 2}px`;
             miniHeart.style.top = `${rect.top + rect.height / 2}px`;
             miniHeart.style.zIndex = '100';
             miniHeart.style.pointerEvents = 'none';
-            miniHeart.style.transition = 'all 0.5s ease-out';
+            miniHeart.style.fontSize = `${Math.random() * 0.8 + 0.5}rem`; // Tamaño de mini-corazones
+            miniHeart.style.opacity = '1';
+            miniHeart.style.transition = 'all 0.6s ease-out'; // Transición más suave
             
             document.body.appendChild(miniHeart);
 
-            // Movimiento aleatorio hacia afuera
-            const x = (Math.random() - 0.5) * 200; // -100px a +100px
-            const y = (Math.random() - 0.5) * 200; // -100px a +100px
+            const x = (Math.random() - 0.5) * 250; // Rango más amplio para dispersión
+            const y = (Math.random() - 0.5) * 250; 
 
-            // Aplica la animación
             setTimeout(() => {
                 miniHeart.style.transform = `translate(${x}px, ${y}px) scale(0)`;
                 miniHeart.style.opacity = '0';
             }, 10);
             
-            // Limpia el DOM
             setTimeout(() => {
                 miniHeart.remove();
             }, 600);
