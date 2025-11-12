@@ -3,452 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Sofi, mi amor eterno ❤️</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Un Espacio de Calma</title>
+    <script src="script.js" defer></script>
 
     <style>
-        /* --- Configuración General y Responsividad --- */
+        /* --- Variables de Color y Tipografía --- */
+        :root {
+            --color-bg: #f4f9f8;        /* Un blanco menta muy pálido */
+            --color-primary: #a8d8c9;   /* Verde menta principal */
+            --color-secondary: #d0eaf0;  /* Azul pálido suave */
+            --color-text: #334e48;      /* Un gris/verde oscuro y calmado */
+            --color-text-light: #5a7d74; /* Texto secundario */
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- Reseteo y Estilos Globales --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 100%); /* Gradiente de amor */
-            color: #4b001a;
-            overflow-x: hidden; /* Evita scroll horizontal */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px; /* Padding general para pantallas pequeñas */
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 20px;
         }
 
-        /* --- Lluvia de Corazones y "Te Amo" (Fondo) --- */
-        #heart-rain-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden; /* Asegura que no haya scrollbar por los elementos que caen */
-        }
-
-        .falling-item {
-            position: absolute;
-            font-size: 1.5rem;
-            color: #ff8fab; /* Rosa corazón */
-            animation: fall linear infinite;
-            opacity: 0;
-            white-space: nowrap; /* Para que "Te Amo" no se divida */
-        }
-        .falling-item.text {
-            font-family: 'Great Vibes', cursive;
-            font-size: 2rem;
-            color: #d6336c;
-            font-weight: bold;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-10vh) rotate(0deg);
-                opacity: 0; /* Empieza invisible */
-            }
-            10% {
-                opacity: 0.8; /* Se vuelve visible */
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(110vh) rotate(360deg);
-                opacity: 0; /* Termina invisible */
-            }
-        }
-        /* --- Fin de Lluvia de Corazones y "Te Amo" --- */
-
-        /* --- Contenedor Principal (Modal-like) --- */
+        /* --- Contenedor Principal --- */
         .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(90, 125, 116, 0.1);
+        }
+
+        header {
             text-align: center;
-            background: rgba(255, 255, 255, 0.9); /* Fondo blanco traslúcido */
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(15px); /* Efecto cristal más fuerte */
-            max-width: 700px; /* Ancho máximo para PC */
-            width: 100%;
-            position: relative;
-            z-index: 10;
-            overflow: hidden; /* Para animaciones de entrada/salida */
-            padding: 30px; /* Más padding para contenido */
-            opacity: 0; /* Inicia oculto para la animación de entrada */
-            transform: translateY(20px); /* Ligeramente desplazado */
-            animation: containerEntrance 1s ease-out forwards;
-        }
-
-        @keyframes containerEntrance {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* --- Título de Amor --- */
-        h1 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 4.5rem; /* Más grande */
-            color: #d6336c; /* Rosa intenso */
-            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.7); /* Sombra más pronunciada */
-            margin-bottom: 25px;
-            line-height: 1.1;
-        }
-
-        /* --- Sección del Corazón Clickeable --- */
-        #clicker-section p {
-            font-size: 1.3rem; /* Texto más grande */
-            margin-bottom: 30px;
-            font-weight: 500;
-            color: #590d22;
-        }
-
-        #main-heart {
-            width: 180px; /* Corazón más grande */
-            height: 180px;
-            background-color: #e02d5f; /* Color del corazón */
-            position: relative;
-            margin: 40px auto; /* Más margen */
-            transform: rotate(-45deg);
-            cursor: pointer;
-            transition: transform 0.2s ease-out, background-color 0.2s;
-            box-shadow: 0 8px 20px rgba(179, 35, 74, 0.6); /* Sombra más fuerte */
-            animation: pulse 1.5s infinite alternate; /* Animación de latido */
-        }
-        @keyframes pulse {
-            from { transform: rotate(-45deg) scale(1); }
-            to { transform: rotate(-45deg) scale(1.08); }
-        }
-
-        #main-heart:before,
-        #main-heart:after {
-            content: "";
-            position: absolute;
-            width: 180px;
-            height: 180px;
-            background-color: #e02d5f;
-            border-radius: 50%;
-            transition: background-color 0.2s;
-        }
-
-        #main-heart:before {
-            top: -90px; /* Ajuste para el nuevo tamaño */
-            left: 0;
-        }
-
-        #main-heart:after {
-            top: 0;
-            left: 90px; /* Ajuste para el nuevo tamaño */
-        }
-
-        /* Efecto al pasar el mouse */
-        #main-heart:hover {
-            transform: rotate(-45deg) scale(1.15); /* Efecto más pronunciado */
-            animation: none; /* Detiene el pulso al hacer hover */
-        }
-
-        /* Efecto al hacer clic */
-        .heart-clicked {
-            transform: rotate(-45deg) scale(1.05) !important;
-            background-color: #ff4d80 !important;
-            box-shadow: 0 5px 15px rgba(255, 77, 128, 0.8) !important;
-            animation: none;
-        }
-        .heart-clicked:before,
-        .heart-clicked:after {
-            background-color: #ff4d80 !important;
-        }
-
-        /* Contador dentro del corazón */
-        #click-counter {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-            font-size: 4rem; /* Contador más grande */
-            color: white;
-            font-weight: bold;
-            z-index: 10;
-            user-select: none;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        /* --- Secciones Ocultas (Mensaje e Hijos) --- */
-        #message-section,
-        #names-section {
-            display: none; /* Ocultas por defecto */
-            animation: fadeInFromTop 1s ease-out forwards; /* Nueva animación de entrada */
-            padding-top: 20px;
-            margin-top: 20px;
-        }
-        
-        #names-section {
-            border-top: 2px dashed #ffb3c1;
-        }
-
-        @keyframes fadeInFromTop {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Animación de salida para el corazón */
-        .fadeOut {
-            animation: fadeOutDown 0.7s forwards;
-        }
-        @keyframes fadeOutDown {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(50px) scale(0.8); }
-        }
-
-        #message-section h2 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem;
-            color: #c9184a;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        #message-section p {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            padding: 0 25px;
+            border-bottom: 2px solid var(--color-bg);
+            padding-bottom: 20px;
             margin-bottom: 30px;
         }
 
-        /* --- Sección de Nombres --- */
-        #names-section h3 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 2.8rem;
-            color: #d6336c;
-            margin-bottom: 15px;
-        }
-
-        #names-section h4 {
-            font-size: 1.4rem;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            color: #590d22;
+        header h1 {
+            color: var(--color-text);
             font-weight: 600;
         }
 
-        #names-section ul {
-            list-style-type: none;
-            padding-left: 0;
-            margin-top: 10px;
+        header p {
+            font-size: 1.1em;
+            color: var(--color-text-light);
         }
 
-        #names-section ul li {
-            font-size: 1.2rem;
-            margin: 10px 0;
+        /* --- Estilos de Sección --- */
+        section {
+            margin-bottom: 35px;
+        }
+
+        h2 {
+            color: var(--color-text);
+            font-weight: 500;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--color-primary);
+        }
+
+        p, li {
+            font-size: 1em;
+            color: var(--color-text-light);
+            margin-bottom: 10px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        /* --- 1. Animación de Respiración --- */
+        .breathing-animator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 250px;
+            background-color: var(--color-bg);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #breathing-circle {
+            width: 150px;
+            height: 150px;
+            background-color: var(--color-secondary);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #4b001a;
-        }
-        
-        #names-section ul li::before {
-            content: '💖';
-            margin-right: 12px;
-            font-size: 1.3rem;
-        }
-        
-        /* Cuadro de Niñas */
-        #girls-form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column; /* Apilar en móviles */
-            align-items: center;
-            gap: 15px;
+            transition: transform 4s ease-in-out, background-color 4s ease-in-out;
+            /* La animación de JS controlará los tiempos de inhalar/exhalar */
         }
 
-        #girl-name-input {
-            padding: 12px 15px;
-            border: 2px solid #ff8fab;
-            border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            width: 80%; /* Ancho responsivo */
-            max-width: 300px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        #girl-name-input:focus {
-            outline: none;
-            border-color: #e02d5f;
-            box-shadow: 0 0 15px #ffc2d1;
-            transform: scale(1.02);
+        #breathing-text {
+            font-size: 1.2em;
+            font-weight: 500;
+            color: var(--color-text);
+            position: absolute;
+            transition: opacity 0.5s ease;
         }
 
-        #girl-name-result {
+        /* --- 2. Acordeón para Ejercicios (Usando <details>) --- */
+        details {
+            background: #ffffff;
+            border: 1px solid var(--color-bg);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(90, 125, 116, 0.05);
+        }
+
+        summary {
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 15px;
+            cursor: pointer;
+            list-style: none; /* Oculta el marcador de flecha por defecto */
+            position: relative;
+        }
+
+        /* Flecha personalizada para el acordeón */
+        summary::after {
+            content: '▾';
+            position: absolute;
+            right: 20px;
+            font-size: 1.2em;
+            transition: transform 0.2s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .details-content {
+            padding: 0 20px 20px 20px;
+            border-top: 1px solid var(--color-bg);
+        }
+
+        .details-content h3 {
             margin-top: 15px;
-            font-size: 1.1rem;
-            color: #c9184a;
-            font-weight: bold;
-            min-height: 25px; /* Para que no salte el layout */
-        }
-        
-        .shake {
-            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-            color: #d6336c; /* Color de texto durante el shake */
+            margin-bottom: 10px;
+            color: var(--color-text);
         }
 
-        @keyframes shake {
-          10%, 90% { transform: translate3d(-2px, 0, 0); }
-          20%, 80% { transform: translate3d(3px, 0, 0); }
-          30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
-          40%, 60% { transform: translate3d(5px, 0, 0); }
+        /* --- 3. Técnica de Grounding --- */
+        .grounding-box {
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .grounding-box h3 {
+            color: var(--color-text);
+            margin-top: 0;
+        }
+        .grounding-box p {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--color-text);
+            margin-bottom: 8px;
         }
 
-        /* --- Footer --- */
-        footer {
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: #800f2f;
-            font-weight: 300;
-        }
-
-        /* --- Media Queries para Responsividad Móvil --- */
-        @media (max-width: 600px) {
-            html, body {
-                padding: 10px;
-            }
-
-            .container {
-                border-radius: 15px;
-                padding: 20px;
-                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            }
-
-            h1 {
-                font-size: 3rem;
-                margin-bottom: 20px;
-            }
-
-            #clicker-section p {
-                font-size: 1rem;
-                margin-bottom: 20px;
-            }
-
-            #main-heart {
-                width: 130px;
-                height: 130px;
-                margin: 30px auto;
-            }
-            #main-heart:before,
-            #main-heart:after {
-                width: 130px;
-                height: 130px;
-            }
-            #main-heart:before { top: -65px; }
-            #main-heart:after { left: 65px; }
-
-            #click-counter {
-                font-size: 2.8rem;
-            }
-
-            #message-section h2 {
-                font-size: 2.5rem;
-            }
-            #message-section p {
-                font-size: 1rem;
-                padding: 0 10px;
-            }
-
-            #names-section h3 {
-                font-size: 2.2rem;
-            }
-            #names-section h4 {
-                font-size: 1.2rem;
-            }
-            #names-section ul li {
-                font-size: 1rem;
-            }
-
-            #girl-name-input {
-                width: 95%;
-                font-size: 1rem;
-            }
-            #girl-name-result {
-                font-size: 0.9rem;
-            }
-
-            footer {
-                margin-top: 30px;
-                font-size: 0.75rem;
-            }
-
-            .falling-item {
-                font-size: 1rem; /* Más pequeños en móvil */
-            }
-            .falling-item.text {
-                font-size: 1.5rem;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <div id="heart-rain-container"></div>
+    <div class="container">
+        <header>
+            <h1>Un Espacio de Calma</h1>
+            <p>Bienvenido. Estás en un lugar seguro. Respira.</p>
+        </header>
 
-    <main class="container">
-        
-        <h1>Sofía Totorico, Te amo</h1>
+        <section id="ayuda-inmediata">
+            <h2>Ayuda Inmediata</h2>
+            <p>Si te sientes abrumado ahora mismo, empieza aquí.</p>
 
-        <section id="clicker-section">
-            <p>¡Dale <strong>137</strong> besos a este corazón para descubrir mi mensaje especial!</p>
-            <div id="main-heart">
-                <span id="click-counter">137</span>
+            <h3>Ejercicio de Respiración Guiado (4-6)</h3>
+            <div class="breathing-animator">
+                <div id="breathing-circle"></div>
+                <div id="breathing-text">Cargando...</div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Técnica de Anclaje (Grounding) 5-4-3-2-1</h3>
+            <div class="grounding-box">
+                <p>Nombra mentalmente:</p>
+                <p><strong>5</strong> cosas que puedas <strong>VER</strong></p>
+                <p><strong>4</strong> cosas que puedas <strong>TOCAR</strong></p>
+                <p><strong>3</strong> cosas que puedas <strong>OÍR</strong></p>
+                <p><strong>2</strong> cosas que puedas <strong>OLER</strong></p>
+                <p><strong>1</strong> cosa que puedas <strong>SABOREAR</strong></p>
             </div>
         </section>
 
-        <section id="message-section">
-            <h2>¡Lo lograste, mi vida!</h2>
-            <p>
-                Te amo un montón. Eres mi persona favorita dentro de Rave y en el universo entero.
-                Me haces RE feliz. Me siento la persona más feliz del mundo desde que te conozco,
-                a pesar de que fue hace poco. ¡Eres todo para mí!
-            </p>
+        <section id="ejercicios">
+            <h2>Ejercicios de Respiración</h2>
+            <p>La respiración consciente es la herramienta más rápida para calmar tu sistema nervioso.</p>
+
+            <details>
+                <summary>Respiración Diafragmática (del Vientre)</summary>
+                <div class="details-content">
+                    <p>Esta técnica ayuda a usar toda tu capacidad pulmonar y reduce el ritmo cardíaco.</p>
+                    <ol>
+                        <li>Acuéstate o siéntate cómodamente.</li>
+                        <li>Coloca una mano en tu pecho y la otra en tu vientre, justo debajo de las costillas.</li>
+                        <li>Inhala lentamente por la nariz. Siente cómo tu vientre se expande y empuja tu mano. El pecho debe moverse muy poco.</li>
+                        <li>Exhala lentamente por la boca con los labios fruncidos (como si soplaras una vela). Siente cómo tu vientre se hunde.</li>
+                        <li>Repite durante 3 a 5 minutos.</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details>
+                <summary>Respiración 4-7-8</summary>
+                <div class="details-content">
+                    <p>Conocida como la "respiración relajante", puede ayudar a conciliar el sueño.</p>
+                    <ol>
+                        <li>Exhala completamente por la boca, haciendo un sonido de "soplo".</li>
+                        <li>Cierra la boca e inhala por la nariz contando mentalmente hasta <strong>4</strong>.</li>
+                        <li>Sostén la respiración contando hasta <strong>7</strong>.</li>
+                        <li>Exhala completamente por la boca (con sonido) contando hasta <strong>8</strong>.</li>
+                        <li>Esto es una respiración completa. Repite el ciclo 3 veces más.</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details>
+                <summary>Respiración Cuadrada (Box Breathing)</summary>
+                <div class="details-content">
+                    <p>Usada por Navy SEALs para mantener la calma bajo presión.</p>
+                    <ol>
+                        <li>Inhala lentamente por la nariz contando hasta <strong>4</strong>.</li>
+                        <li>Sostén la respiración contando hasta <strong>4</strong>.</li>
+                        <li>Exhala lentamente por la nariz (o boca) contando hasta <strong>4</strong>.</li>
+                        <li>Sostén la exhalación contando hasta <strong>4</strong>.</li>
+                        <li>Repite el "cuadrado" durante varios minutos.</li>
+                    </ol>
+                </div>
+            </details>
         </section>
 
-        <section id="names-section">
-            <h3>Nuestros Futuros Hijos</h3>
+        <section id="mindfulness">
+            <h2>Prácticas de Atención Plena (Mindfulness)</h2>
+            <p>El mindfulness es simplemente prestar atención al presente, sin juzgar. Puedes practicarlo en cualquier momento.</p>
             
-            <h4>💖 Niños:</h4>
-            <ul>
-                <li>ILIA BARRETO TOTORICO</li>
-                <li>SEBASTIAN YATRA BARRETO TOTORICO</li>
-                <li>FARADAY ELIANS TOTORICO BARRETO</li>
-            </ul>
+            <details>
+                <summary>Mindfulness al Lavar los Platos</summary>
+                <div class="details-content">
+                    <p>En lugar de lavar en piloto automático, úsalo como una práctica de anclaje.</p>
+                    <ul>
+                        <li><strong>Siente:</strong> Nota la temperatura del agua en tus manos. Siente la textura de la esponja y la superficie del plato.</li>
+                        <li><strong>Escucha:</strong> Presta atención al sonido del agua corriendo y al frotar de la esponja.</li>
+                        <li><strong>Huele:</strong> Nota el aroma del jabón.</li>
+                        <li><strong>Observa:</strong> Mira cómo desaparece la suciedad y cómo se forman las burbujas.</li>
+                        <li>Cuando tu mente divague (y lo hará), simplemente tráela de vuelta con amabilidad a la tarea de lavar los platos.</li>
+                    </ul>
+                </div>
+            </details>
 
-            <h4>💖 Niñas:</h4>
-            <p>Propón un nombre para nuestra niña:</p>
-            <form id="girls-form">
-                <input type="text" id="girl-name-input" placeholder="Escribe un nombre...">
-                </form>
-            <p id="girl-name-result"></p>
+            <details>
+                <summary>Afirmaciones Positivas</summary>
+                <div class="details-content">
+                    <p>A veces, necesitamos recordatorios amables. Repite aquellos que resuenen contigo.</p>
+                    <ul>
+                        <li>"Este sentimiento es incómodo, pero no es peligroso."</li>
+                        <li>"He superado momentos difíciles antes, y también superaré esto."</li>
+                        <li>"Estoy haciendo lo mejor que puedo con lo que tengo."</li>
+                        <li>"Elijo responder con calma en lugar de reaccionar con miedo."</li>
+                        <li>"Todos mis sentimientos son válidos, pero no son la totalidad de quién soy."</li>
+                        <li>"Estoy a salvo en este momento."</li>
+                    </ul>
+                </div>
+            </details>
         </section>
 
-        <footer>
-            <p>&copy; Derechos y autor a Lauty, alias 33discosduros.</p>
-        </footer>
-    </main>
+        <section id="psicoeducacion">
+            <h2>Entendiendo la Ansiedad (El "Por Qué")</h2>
+            <p>El conocimiento es poder. Entender qué es la ansiedad reduce el miedo a la propia sensación.</p>
 
-    <script src="script.js"></script>
+            <details>
+                <summary>¿Qué es la Ansiedad?</summary>
+                <div class="details-content">
+                    <p>La ansiedad es la <strong>alarma de incendio</strong> natural de tu cuerpo. Es parte de la respuesta de "lucha o huida", diseñada para protegerte del peligro.</p>
+                    <p>A veces, esta alarma se vuelve demasiado sensible y se activa cuando no hay un peligro real (como una alarma de incendios que se activa con el vapor de la ducha). Tu corazón late rápido, respiras deprisa y tus músculos se tensan para prepararte para... bueno, un peligro que no existe. No estás "roto", tu sistema de alarma solo está sobreprotegiéndote.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>¿Qué es un Ataque de Pánico?</summary>
+                <div class="details-content">
+                    <p><strong>Diferencia clave:</strong></p>
+                    <ul>
+                        <li><strong>Ataque de Ansiedad:</strong> Generalmente se construye lentamente. Es una preocupación intensa y persistente sobre algo (el futuro, un evento, etc.). Es muy desagradable, pero manejable.</li>
+                        <li><strong>Ataque de Pánico:</strong> Es una ola repentina e intensa de miedo que alcanza su pico en 10 minutos. Es aterrador y a menudo físico (palpitaciones, sensación de ahogo, mareo). A menudo parece salir "de la nada".</li>
+                    </ul>
+                    <p>Ambos son temporales y no son peligrosos, aunque se sientan así.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>¿Por qué me pasa esto a mí?</summary>
+                <div class="details-content">
+                    <p><strong>No es tu culpa.</strong> Nadie elige tener ansiedad. Es una combinación compleja de factores:</p>
+                    <ul>
+                        <li><strong>Genética:</strong> Algunas personas simplemente tienen sistemas nerviosos más sensibles.</li>
+                        <li><strong>Estrés:</strong> El estrés prolongado (trabajo, familia, finanzas) puede agotar tu capacidad de afrontamiento.</li>
+                        <li><strong>Experiencias Pasadas:</strong> Eventos difíciles pueden enseñar a tu cerebro a estar en alerta constante.</li>
+                        <li><strong>Hábitos:</strong> Falta de sueño, cafeína o no tener tiempo de descanso pueden contribuir.</li>
+                    </ul>
+                    <p>Entender la causa no es para culpar, sino para saber dónde enfocar la compasión y el esfuerzo.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>El Círculo Vicioso de la Ansiedad</summary>
+                <div class="details-content">
+                    <p>El ciclo a menudo funciona así:</p>
+                    <ol>
+                        <li><strong>Sensación Corporal:</strong> (Ej. Tu corazón late un poco más rápido).</li>
+                        <li><strong>Pensamiento:</strong> "¿Qué pasa? ¿Me está dando un infarto?".</li>
+                        <li><strong>Emoción:</strong> Miedo, pánico.</li>
+                        <li><strong>Reacción:</strong> Tu cuerpo libera adrenalina en respuesta al miedo, lo que hace que tu corazón lata AÚN más rápido.</li>
+                        <li><strong>Conclusión:</strong> "¡Ves! ¡Algo malo está pasando!".</li>
+                    </ol>
+                    <p>Este es el "miedo al miedo". Rompemos el ciclo al no tenerle miedo a las sensaciones (Paso 1) y al no catastrofizar (Paso 2). Las técnicas de respiración ayudan aquí.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Mitos vs. Realidades</summary>
+                <div class="details-content">
+                    <p><strong>Mito:</strong> "Me voy a volver loco" o "Voy a perder el control".</p>
+                    <p><strong>Realidad:</strong> La ansiedad y los ataques de pánico no causan locura. Son sensaciones físicas y mentales intensas, pero son temporales y no te harán perder el control de tus actos.</p>
+                    <br>
+                    <p><strong>Mito:</strong> "Me va a dar un infarto".</p>
+                    <p><strong>Realidad:</strong> Aunque las palpitaciones dan miedo, un ataque de pánico no es un ataque al corazón. Es tu cuerpo activando la "lucha o huida", no fallando.</p>
+                    <br>
+                    <p><strong>Mito:</strong> "Si tengo ansiedad, soy débil".</p>
+                    <p><strong>Realidad:</strong> La ansiedad no tiene nada que ver con la debilidad. Se necesita una fuerza tremenda para vivir con un sistema de alarma hipersensible. Eres un superviviente.</p>
+                </div>
+            </details>
+        </section>
+
+        <section id="recursos">
+            <h2>Esto es un primer paso, no el último</h2>
+            <p>Estas herramientas son excelentes para manejar los síntomas en el momento. Si sientes que la ansiedad interfiere con tu vida diaria, por favor considera buscar ayuda profesional.</p>
+            <p>Hablar con un terapeuta puede darte herramientas personalizadas y ayudarte a llegar a la raíz del problema. No tienes que pasar por esto solo.</p>
+        </section>
+
+    </div>
+
 </body>
 </html>
-
-
-
