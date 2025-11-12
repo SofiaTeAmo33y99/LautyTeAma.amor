@@ -3,73 +3,89 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* --- 1. Lógica del Animador de Respiración --- */
 
-    // Seleccionamos los elementos que necesitamos del HTML
     const circle = document.getElementById('breathing-circle');
     const text = document.getElementById('breathing-text');
     const button = document.getElementById('start-breath-btn');
 
-    let isBreathing = false; // Controla si la animación está activa
-    let inhaleTime = 4000;   // 4 segundos para inhalar
-    let exhaleTime = 6000;   // 6 segundos para exhalar
+    let isBreathing = false;
+    let inhaleTime = 4000;
+    let exhaleTime = 6000;
     
-    // Variables para guardar los "temporizadores" y poder cancelarlos si se presiona "Detener"
     let inhaleTimeout;
     let exhaleTimeout;
 
-    // Esta es la función principal que crea el ciclo de respiración
     function startBreathingCycle() {
-        if (!isBreathing) return; // Si se presionó detener, no hace nada
+        if (!isBreathing) return;
 
-        // Fase de INHALACIÓN
         text.textContent = 'Inhala (4s)';
-        circle.style.transitionDuration = `${inhaleTime / 1000}s`; // Pasa la duración a segundos (ej. "4s")
+        circle.style.transitionDuration = `${inhaleTime / 1000}s`;
         circle.classList.add('expand');
 
-        // Espera a que termine la inhalación (4s)
         inhaleTimeout = setTimeout(() => {
-            // Fase de EXHALACIÓN
             text.textContent = 'Exhala (6s)';
-            circle.style.transitionDuration = `${exhaleTime / 1000}s`; // Pasa la duración a segundos (ej. "6s")
+            circle.style.transitionDuration = `${exhaleTime / 1000}s`;
             circle.classList.remove('expand');
 
-            // Espera a que termine la exhalación (6s)
             exhaleTimeout = setTimeout(() => {
-                // Vuelve a empezar el ciclo
                 startBreathingCycle();
             }, exhaleTime);
 
         }, inhaleTime);
     }
 
-    // Qué pasa cuando se hace clic en el botón
     button.addEventListener('click', () => {
         if (isBreathing) {
-            // --- Si se está respirando, DETENER ---
             isBreathing = false;
             button.textContent = 'Comenzar';
             text.textContent = 'Presiona "Comenzar" para iniciar';
             
-            // Limpia los temporizadores para que el ciclo se detenga inmediatamente
             clearTimeout(inhaleTimeout);
             clearTimeout(exhaleTimeout);
 
-            // Resetea el círculo a su estado inicial
             circle.classList.remove('expand');
-            circle.style.transitionDuration = '0.5s'; // Una transición rápida para volver
+            circle.style.transitionDuration = '0.5s';
 
         } else {
-            // --- Si no se está respirando, COMENZAR ---
             isBreathing = true;
             button.textContent = 'Detener';
-            // Inicia el ciclo por primera vez
             startBreathingCycle();
         }
     });
 
 
-    /* --- 2. Lógica de los Mensajes Personales --- */
+    /* --- 2. Lógica del Escaneo Corporal Interactivo --- */
 
-    // La lista de mensajes que me diste
+    const bodyParts = document.querySelectorAll('.body-part');
+    const scanInstruction = document.getElementById('scan-instruction');
+
+    const scanInstructions = {
+        "Cabeza": "Nota cualquier sensación en tu cabeza y rostro. ¿Hay tensión en la mandíbula o la frente? Dirige tu respiración allí.",
+        "Cuello y Hombros": "Siente la tensión que a menudo se acumula aquí. ¿Está rígida? Permite que tu respiración suavice y libere.",
+        "Pecho": "¿Cómo se siente tu pecho? ¿Abierto o contraído? Observa el ritmo de tu corazón sin juicio. Respira profundamente aquí.",
+        "Abdomen": "Presta atención a tu abdomen, a menudo un centro de emociones. ¿Hay mariposas, nudos? Suaviza tu abdomen con cada exhalación.",
+        "Brazos y Manos": "Siente el peso y las sensaciones en tus brazos y manos. ¿Están relajados o tensos? Permite que se aflojen.",
+        "Pelvis y Caderas": "Conecta con la base de tu cuerpo. Siente la estabilidad de tus caderas. Suelta cualquier tensión en esta zona.",
+        "Piernas": "Nota tus piernas, tus pilares. ¿Hay inquietud o pesadez? Siente cómo te conectan con la tierra.",
+        "Pies": "Siente tus pies en el suelo. La conexión con la tierra, la estabilidad. Dirige tu atención a cada dedo, a la planta del pie."
+    };
+
+    bodyParts.forEach(part => {
+        part.addEventListener('click', () => {
+            // Elimina el resaltado de todas las partes primero
+            bodyParts.forEach(p => p.classList.remove('highlighted'));
+            
+            // Resalta la parte clicada
+            part.classList.add('highlighted');
+            
+            // Muestra la instrucción correspondiente
+            const partName = part.dataset.part;
+            scanInstruction.textContent = scanInstructions[partName];
+        });
+    });
+
+
+    /* --- 3. Lógica de los Mensajes Personales --- */
+
     const messages = [
         "TE QUIERO mucho no lo olvides",
         "Te adoro preciosa la más linda sos",
@@ -88,37 +104,25 @@ document.addEventListener('DOMContentLoaded', () => {
         "Ya se acabaron encerio"
     ];
 
-    // Seleccionamos el elemento de texto
     const personalTextElement = document.getElementById('personal-text');
-    let messageIndex = 0; // Para saber qué mensaje mostrar
+    let messageIndex = 0;
 
     function changePersonalMessage() {
-        // 1. Añade la clase 'fade-out' para que el texto desaparezca suavemente
         personalTextElement.classList.add('fade-out');
 
-        // 2. Espera 0.5s (lo que dura la animación de fade-out)
         setTimeout(() => {
-            // 3. Cambia el texto
             personalTextElement.textContent = messages[messageIndex];
             
-            // 4. Avanza al siguiente mensaje
             messageIndex++;
-            
-            // 5. Si llega al final de la lista, vuelve al principio
             if (messageIndex >= messages.length) {
                 messageIndex = 0;
             }
 
-            // 6. Quita la clase 'fade-out' para que el nuevo texto aparezca
             personalTextElement.classList.remove('fade-out');
-
-        }, 500); // 500 milisegundos = 0.5 segundos (debe coincidir con el CSS)
+        }, 500);
     }
 
-    // 1. Muestra el primer mensaje inmediatamente al cargar la página
     changePersonalMessage();
-
-    // 2. Llama a la función 'changePersonalMessage' cada 4 segundos (4000 milisegundos)
     setInterval(changePersonalMessage, 4000);
 
 });
