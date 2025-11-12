@@ -113,13 +113,11 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
-            /* El estado "contraído" inicial */
             transform: scale(0.8);
             transition: transform ease-in-out;
         }
 
         #breathing-circle.expand {
-            /* El estado "expandido" */
             transform: scale(1.2);
         }
 
@@ -170,7 +168,7 @@
             margin-top: 0;
         }
 
-        /* --- 3. Escaneo Corporal --- */
+        /* --- 3. Escaneo Corporal (CON SILUETA CORREGIDA) --- */
         #body-scan-container {
             display: flex;
             flex-direction: column;
@@ -180,19 +178,30 @@
 
         #human-silhouette {
             position: relative;
-            width: 180px; /* Ancho base */
-            height: 350px; /* Alto base */
-            background-color: var(--primary-color);
-            border-radius: 50% 50% 40% 40% / 15% 15% 30% 30%; /* Forma más curvilínea */
+            /* Establecemos un tamaño base para la silueta */
+            width: 180px; 
+            height: 450px; /* La nueva silueta es más alta (ratio 1:2.5) */
             margin: 20px auto;
-            border: 2px solid var(--text-color);
-            overflow: hidden; /* Para que las partes no se salgan */
+            
+            /* BORRAMOS los estilos que la hacían un cuadrado */
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+            
+            /* AÑADIMOS la imagen SVG de la silueta humana */
+            /* Esta imagen está "incrustada" para no necesitar más archivos */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 250'%3E%3Ccircle cx='50' cy='25' r='25' fill='%23B2D8C6'/%3E%3Cpath fill='%23B2D8C6' d='M50 50 C20 50 10 70 10 100 L10 170 L30 170 L30 240 C30 245 35 250 40 250 L60 250 C65 250 70 245 70 240 L70 170 L90 170 L90 100 C90 70 80 50 50 50 Z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain; /* Ajusta la imagen al contenedor */
+            overflow: hidden;
         }
 
         .body-part {
             position: absolute;
-            background-color: transparent; /* Por defecto transparente */
-            border: 1px solid rgba(0,0,0,0.0); /* Borde transparente */
+            /* Las partes son invisibles, solo son zonas de clic */
+            background-color: transparent;
+            border: 1px solid rgba(0,0,0,0.0);
             cursor: pointer;
             transition: background-color 0.3s ease, border-color 0.3s ease;
             display: flex;
@@ -205,7 +214,7 @@
             line-height: 1.2;
             padding: 2px;
             box-sizing: border-box;
-            border-radius: 10px; /* Bordes ligeramente redondeados para las partes */
+            border-radius: 10px;
         }
 
         .body-part:hover {
@@ -216,18 +225,18 @@
             background-color: var(--highlight-color); /* Color de resaltado */
             border-color: var(--text-color);
             color: var(--white); /* Texto visible al resaltar */
-            z-index: 10; /* Para que esté por encima de otras partes */
+            z-index: 10;
         }
 
-        /* Definiciones de las partes del cuerpo ajustadas para la forma humana */
-        #head { top: 10px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; border-radius: 50%; }
-        #neck-shoulders { top: 70px; left: 50%; transform: translateX(-50%); width: 140px; height: 40px; border-radius: 20px;}
-        #chest { top: 100px; left: 50%; transform: translateX(-50%); width: 150px; height: 60px; border-radius: 30px 30px 10px 10px;}
-        #abdomen { top: 155px; left: 50%; transform: translateX(-50%); width: 140px; height: 50px; border-radius: 10px 10px 25px 25px;}
-        #arms { top: 90px; left: 50%; transform: translateX(-50%); width: 220px; height: 120px; } /* Área más grande para abarcar los brazos */
-        #pelvis { top: 200px; left: 50%; transform: translateX(-50%); width: 145px; height: 45px; border-radius: 20px;}
-        #legs { top: 240px; left: 50%; transform: translateX(-50%); width: 140px; height: 70px; border-radius: 10px 10px 0 0;}
-        #feet { top: 305px; left: 50%; transform: translateX(-50%); width: 100px; height: 40px; border-radius: 0 0 15px 15px;}
+        /* RE-POSICIONAMOS las zonas de clic para que encajen sobre la nueva silueta */
+        #head { top: 0; left: 50%; transform: translateX(-50%); width: 90px; height: 90px; border-radius: 50%; }
+        #neck-shoulders { top: 80px; left: 50%; transform: translateX(-50%); width: 160px; height: 40px; }
+        #chest { top: 100px; left: 50%; transform: translateX(-50%); width: 160px; height: 80px; }
+        #abdomen { top: 180px; left: 50%; transform: translateX(-50%); width: 160px; height: 80px; }
+        #arms { top: 90px; left: 50%; transform: translateX(-50%); width: 180px; height: 180px; } /* Zona amplia para brazos/pecho/abdomen */
+        #pelvis { top: 250px; left: 50%; transform: translateX(-50%); width: 160px; height: 60px; }
+        #legs { top: 300px; left: 50%; transform: translateX(-50%); width: 100px; height: 90px; }
+        #feet { top: 380px; left: 50%; transform: translateX(-50%); width: 100px; height: 70px; border-radius: 0 0 10px 10px;}
         
         #scan-instruction {
             margin-top: 20px;
