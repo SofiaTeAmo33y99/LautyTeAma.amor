@@ -14,6 +14,7 @@
             --color-secondary: #d0eaf0;  /* Azul pálido suave */
             --color-text: #334e48;      /* Un gris/verde oscuro y calmado */
             --color-text-light: #5a7d74; /* Texto secundario */
+            --color-accent-red: #e07a5f; /* Rojo suave para acentos (silueta) */
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
@@ -194,6 +195,7 @@
             border: 1px solid var(--color-primary);
             border-radius: 8px;
             background-color: white;
+            margin-bottom: 15px;
         }
 
         .body-scan-svg path {
@@ -210,18 +212,18 @@
         }
 
         .body-scan-svg path.active {
-            fill: var(--color-secondary);
+            fill: var(--color-accent-red); /* Color rojo para la parte activa */
             stroke-width: 1.5;
             animation: pulse-active 1.5s infinite alternate; /* Animación para la zona activa */
         }
         
         @keyframes pulse-active {
-            from { fill: var(--color-secondary); }
-            to { fill: var(--color-primary); }
+            from { fill: var(--color-accent-red); }
+            to { fill: #f0c3bb; /* Tono más claro del rojo */ }
         }
 
         #scan-instructions {
-            margin-top: 20px;
+            margin-top: 10px;
             background-color: #ffffff;
             border: 1px solid var(--color-secondary);
             padding: 15px;
@@ -234,8 +236,76 @@
             color: var(--color-text);
             font-style: italic;
             transition: all 0.3s ease-out;
+            width: 100%;
         }
 
+        /* --- Sección de Mensajes de Amor --- */
+        .love-messages-section {
+            text-align: center;
+            margin-top: 50px;
+            background-color: var(--color-primary);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden; /* Para los corazones */
+        }
+
+        .love-messages-section h2 {
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.5);
+            margin-bottom: 25px;
+        }
+
+        #love-message-display {
+            background-color: white;
+            padding: 20px 25px;
+            border-radius: 10px;
+            font-size: 1.6em;
+            font-weight: 600;
+            color: var(--color-accent-red);
+            min-height: 80px; /* Para evitar saltos de layout */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Para animación de texto */
+        }
+
+        /* Animación de los corazones */
+        .heart {
+            position: absolute;
+            background-color: var(--color-accent-red);
+            transform: rotate(-45deg);
+            animation: floatHeart 8s infinite ease-in-out;
+            opacity: 0;
+            z-index: 0;
+        }
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-accent-red);
+            border-radius: 50%;
+        }
+        .heart::before {
+            top: -50%;
+            left: 0;
+        }
+        .heart::after {
+            top: 0;
+            left: 50%;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(100px) rotate(-45deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-300px) rotate(-45deg); opacity: 0; }
+        }
+        
     </style>
 </head>
 <body>
@@ -355,19 +425,19 @@
             <div class="body-scan-container">
                 <svg viewBox="0 0 200 400" class="body-scan-svg">
                     <title>Silueta Humana para Escaneo Corporal</title>
-                    <path id="head" d="M100 20 C115 20, 125 35, 125 50 L125 60 C125 75, 115 90, 100 90 C85 90, 75 75, 75 60 L75 50 C75 35, 85 20, 100 20 Z" data-label="Cabeza y Rostro"/>
-                    <path id="neck-shoulders" d="M90 90 L110 90 L130 110 L135 120 L130 130 L120 125 L110 120 H90 L80 125 L70 130 L65 120 L70 110 L90 90 Z" data-label="Cuello y Hombros"/>
-                    <path id="chest-upper-back" d="M90 120 H110 V150 H120 V160 H110 V170 H90 V160 H80 V150 H90 Z M130 110 L135 120 V160 C135 170, 130 175, 120 180 L110 185 V170 H120 V160 H110 L90 160 H80 L70 160 C65 170, 60 175, 60 160 V120 L65 110 L70 110 Z" data-label="Pecho y Espalda Superior"/>
-                    <path id="arm-left" d="M130 120 C145 130, 150 150, 150 170 V200 C150 220, 145 240, 130 250 L120 230 L125 180 L125 140 L130 120 Z" data-label="Brazo Izquierdo"/>
-                    <path id="arm-right" d="M70 120 C55 130, 50 150, 50 170 V200 C50 220, 55 240, 70 250 L80 230 L75 180 L75 140 L70 120 Z" data-label="Brazo Derecho"/>
-                    <path id="abdomen-lower-back" d="M90 170 H110 V220 H90 Z M75 180 L80 230 C80 240, 90 250, 100 250 C110 250, 120 240, 120 230 L125 180 Z" data-label="Abdomen y Espalda Baja"/>
-                    <path id="hips-glutes" d="M80 230 C80 240, 90 250, 100 250 C110 250, 120 240, 120 230 L110 250 L90 250 Z M75 240 C70 250, 70 260, 75 270 L85 275 L90 260 L80 250 Z M125 240 C130 250, 130 260, 125 270 L115 275 L110 260 L120 250 Z" data-label="Cadera y Glúteos"/>
-                    <path id="thigh-left" d="M90 250 L95 270 V300 L90 310 L85 300 L80 270 Z M100 250 L105 270 V300 L110 310 L115 300 L120 270 Z" data-label="Muslo y Rodilla Izquierda"/>
-                    <path id="thigh-right" d="M80 270 L85 300 L90 310 L95 300 V270 L90 250 Z M110 270 L115 300 L120 310 L125 300 V270 L120 250 Z" data-label="Muslo y Rodilla Derecha"/>
-                    <path id="lower-leg-left" d="M85 310 V350 L90 360 L95 350 V310 Z" data-label="Pantorrilla Izquierda"/>
-                    <path id="lower-leg-right" d="M105 310 V350 L110 360 L115 350 V310 Z" data-label="Pantorrilla Derecha"/>
-                    <path id="foot-left" d="M85 360 L80 370 H90 L95 360 Z" data-label="Pie Izquierdo"/>
-                    <path id="foot-right" d="M105 360 L110 370 H120 L115 360 Z" data-label="Pie Derecho"/>
+                    <path id="head" d="M100 20 C120 20, 130 40, 130 60 V75 C130 90, 120 100, 100 100 C80 100, 70 90, 70 75 V60 C70 40, 80 20, 100 20 Z" data-label="Cabeza y Rostro"/>
+                    <path id="neck-shoulders" d="M85 100 C80 105, 75 115, 75 125 V130 L65 140 L70 150 L80 145 H120 L130 150 L135 140 L125 130 V125 C125 115, 120 105, 115 100 Z" data-label="Cuello y Hombros"/>
+                    <path id="chest-upper-back" d="M80 145 H120 V190 C120 200, 110 205, 100 205 C90 205, 80 200, 80 190 Z" data-label="Pecho y Espalda Superior"/>
+                    <path id="arm-left" d="M120 150 C135 160, 140 180, 140 200 V230 C140 250, 135 270, 120 280 L110 260 L115 210 L115 170 Z" data-label="Brazo Izquierdo"/>
+                    <path id="arm-right" d="M80 150 C65 160, 60 180, 60 200 V230 C60 250, 65 270, 80 280 L90 260 L85 210 L85 170 Z" data-label="Brazo Derecho"/>
+                    <path id="abdomen-lower-back" d="M80 205 V250 C80 260, 90 265, 100 265 C110 265, 120 260, 120 250 V205 Z" data-label="Abdomen y Espalda Baja"/>
+                    <path id="hips-glutes" d="M80 265 H120 L125 280 C125 290, 120 300, 100 300 C80 300, 75 290, 75 280 Z" data-label="Cadera y Glúteos"/>
+                    <path id="thigh-left" d="M100 300 C110 300, 115 310, 115 320 V340 C115 350, 110 360, 100 360 L90 350 V330 C90 320, 95 310, 100 300 Z" data-label="Muslo Izquierdo"/>
+                    <path id="thigh-right" d="M100 300 C90 300, 85 310, 85 320 V340 C85 350, 90 360, 100 360 L110 350 V330 C110 320, 105 310, 100 300 Z" data-label="Muslo Derecho"/>
+                    <path id="lower-leg-left" d="M95 360 V380 L100 390 L105 380 V360 Z" data-label="Pantorrilla Izquierda"/>
+                    <path id="lower-leg-right" d="M95 360 V380 L100 390 L105 380 V360 Z" data-label="Pantorrilla Derecha"/>
+                    <path id="foot-left" d="M90 390 H100 V400 H90 Z" data-label="Pie Izquierdo"/>
+                    <path id="foot-right" d="M100 390 H110 V400 H100 Z" data-label="Pie Derecho"/>
                 </svg>
                 <p id="scan-instructions">Haz clic en una parte del cuerpo para empezar tu escaneo.</p>
             </div>
@@ -448,6 +518,18 @@
             <p style="text-align: center; font-style: italic; font-size: 1.2em; color: var(--color-primary); margin-top: 30px;">
                 No estas sola mi vida, Lauty va a estar siempre para cuidarte y apoyarte te adoro.
             </p>
+        </section>
+
+        <section class="love-messages-section">
+            <h2>Solo para ti &lt;3</h2>
+            <div id="love-message-display">Cargando mensajes de amor...</div>
+            <div class="heart" style="width: 15px; height: 15px; left: 10%; animation-delay: 0s;"></div>
+            <div class="heart" style="width: 10px; height: 10px; left: 20%; animation-delay: 1.5s;"></div>
+            <div class="heart" style="width: 20px; height: 20px; left: 30%; animation-delay: 0.5s;"></div>
+            <div class="heart" style="width: 12px; height: 12px; left: 45%; animation-delay: 2s;"></div>
+            <div class="heart" style="width: 18px; height: 18px; left: 60%; animation-delay: 1s;"></div>
+            <div class="heart" style="width: 14px; height: 14px; left: 75%; animation-delay: 2.5s;"></div>
+            <div class="heart" style="width: 16px; height: 16px; left: 90%; animation-delay: 0.8s;"></div>
         </section>
 
     </div>
